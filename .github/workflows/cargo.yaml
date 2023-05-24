@@ -7,36 +7,17 @@ jobs:
     name: ARM64
     runs-on: ubuntu-latest
     steps:
-      - name: Install libvips-dev
-        run: sudo apt-get install -y libvips-dev    
-      - uses: actions/checkout@v2
-      - uses: actions-rs/toolchain@v1
+      - uses: actions/checkout@v2    
+      - name: Release for arm64        
+        uses: uraimo/run-on-arch-action@v2
         with:
-          toolchain: stable
-          target: aarch64-unknown-linux-gnu
-          override: true
-      - uses: actions-rs/cargo@v1
-        with:
-          use-cross: true
-          command: build
-          args: --target aarch64-unknown-linux-gnu --release --all-features --manifest-path thumbnail-test/rust-perftest/Cargo.toml
-  Linux:
-    name: Linux
-    runs-on: ubuntu-latest
-    steps:    
-      - name: Install libvips-dev
-        run: sudo apt-get install -y libvips-dev
-      - uses: actions/checkout@v2
-      - uses: actions-rs/toolchain@v1
-        with:
-          toolchain: stable
-      - uses: actions-rs/cargo@v1
-        with:
-          command: build
-          args: --release --all-features --manifest-path thumbnail-test/rust-perftest/Cargo.toml
-      - name: Upload artifact
-        uses: actions/upload-artifact@v3
-        with:
-          name: rust-perftest
-          path: thumbnail-test/rust-perftest/target/release/rust-perftest
-          retention-days: 1          
+          arch: aarch64
+          # @TODO: eventually we need to get this to work on ubuntu20.04 for build parity but we are using
+          # 18.04 because it was easier to get working, apparently there is a bug in 20.04s gpg?
+          distro: ubuntu18.04
+          githubToken: ${{ github.token }}  
+          install: |            
+            apt update && apt -y install libvips -dev
+          run: |
+            curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh            
+            cargo build --release --manifest-path thumbnail-test/rust-perftest/Cargo.toml
