@@ -3,8 +3,25 @@ on: [push]
 name: Cargo
 
 jobs:
-  build_and_test:
-    name: Rust project
+  ARM64:
+    name: ARM64
+    runs-on: ubuntu-latest
+    steps:
+      - name: Install libvips-dev
+        run: sudo apt-get install -y libvips-dev    
+      - uses: actions/checkout@v2
+      - uses: actions-rs/toolchain@v1
+        with:
+          toolchain: stable
+          target: aarch64-unknown-linux-gnu
+          override: true
+      - uses: actions-rs/cargo@v1
+        with:
+          use-cross: true
+          command: build
+          args: --target aarch64-unknown-linux-gnu --release --all-features --manifest-path thumbnail-test/rust-perftest/Cargo.toml
+  Linux:
+    name: Linux
     runs-on: ubuntu-latest
     steps:    
       - name: Install libvips-dev
