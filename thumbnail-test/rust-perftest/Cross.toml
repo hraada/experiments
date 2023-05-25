@@ -1,2 +1,2 @@
 [build]
-dockerfile = "vips.Dockerfile"
+dockerfile = "thumbnail-test/rust-perftest/vips.Dockerfile"
