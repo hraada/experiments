@@ -12,6 +12,3 @@ sha1 = "0.10.5"
 [profile.release]
 lto = "fat"
 opt-level = 3
-
-[package.metadata.cross.target.aarch64-unknown-linux-gnu]
-pre-build = ["dpkg --add-architecture arm64 && apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends tzdata libvips-dev"]
