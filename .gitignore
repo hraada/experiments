@@ -3,3 +3,4 @@
 go
 .rustup
 .profile
+target

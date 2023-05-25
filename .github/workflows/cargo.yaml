@@ -23,5 +23,5 @@ jobs:
         with:
           command: ${{ matrix.platform.command }}
           target: ${{ matrix.platform.target }}
-          args: "--locked --release --manifest-path thumbnail-test/rust-perftest/Cargo.toml"
+          args: "--locked --release"
           strip: true                        
